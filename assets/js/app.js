@@ -14,9 +14,10 @@ function viewCombinationTable() {
 
     generateTable(table, thread, tbody);
 
-    let num = 3;
-    row = generateConbinationRow(text_list, num);
-    tbody.appendChild(row);
+    for (var num = 0; num < 16; num++) {
+        row = generateConbinationRow(text_list, num);
+        tbody.appendChild(row);
+    }
 }
 
 function generateTable(table, thread, tbody) {
@@ -65,7 +66,7 @@ function generateConbination(idx_list, text_list, seperator) {
     let conbi = "";
 
     for (var i = 0; i < idx_list.length; i++) {
-        if (idx_list[i] == 1) {
+        if (idx_list[i] === 1) {
             conbi += text_list[i] + seperator;
         }
 
@@ -75,13 +76,12 @@ function generateConbination(idx_list, text_list, seperator) {
 // 数字を2進数に変換して, リストに格納する関数
 function generateBinaryListFromDecimal(num) {
     binary_list = [];
-
+    
     for (var i = 0; i < 4; i++) {
-        flag = num % 2;
+        flag = Math.trunc(num % 2);
         binary_list.unshift(flag);
 
-        num = num / 2;
+        num = Math.trunc(num / 2);
     }
-
     return binary_list;
 }

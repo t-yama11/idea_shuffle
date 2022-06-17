@@ -10,13 +10,18 @@ function viewCombinationTable() {
     const text_3 = document.getElementById('text_3');
     const text_4 = document.getElementById('text_4');
 
+    // 組み合わせを求めるテキスト要素群.
     const text_list = [text_1.value, text_2.value, text_3.value, text_4.value];
 
+    // 表のヘッダーの作成.
     generateTable(table, thread, tbody);
 
-    for (var num = 0; num < 16; num++) {
-        row = generateConbinationRow(text_list, num);
-        tbody.appendChild(row);
+    // テキスト要素が2つ以上となる組み合わせを求める.
+    for (var num = 1; num < 16; num++) {
+        if (is_two_or_more_elements_of_a_idea(num)) {
+            row = generateConbinationRow(text_list, num);
+            tbody.appendChild(row);
+        }
     }
 }
 
@@ -43,8 +48,9 @@ function generateTable(table, thread, tbody) {
 function generateConbinationRow(text_list, num) {
     // [ok] テキストボックスに入力した文字列を表に挿入する.
     // [ok] テキストボックスに入力した文字列の組み合わせを作る.
-    // [] 少なくとも入力した文字列が2つ以上の組み合わせを対象とする.
-        // [] 1つ以上の組み合わせを対象とする.
+    // [] 少なくとも入力した文字列が2つ以上の組み合わせを作成する(num が2の冪乗でないとき).
+        // [ok] 1つ以上の組み合わせを作成する(num が0でないとき).
+        // [ok] 全ての組み合わせを作成する.
     separator = ', '
 
     let row = document.createElement('tr');
@@ -61,10 +67,11 @@ function generateConbinationRow(text_list, num) {
     return row;
 }
 
-// インデックスリストから組み合わせを作る関数
+// インデックスリストから組み合わせを作る関数.
 function generateConbination(idx_list, text_list, seperator) {
     let conbi = "";
 
+    // テキスト要素とseparatorを結合させて, アイデアの候補を作成.
     for (var i = 0; i < idx_list.length; i++) {
         if (idx_list[i] === 1) {
             conbi += text_list[i] + seperator;
@@ -73,10 +80,13 @@ function generateConbination(idx_list, text_list, seperator) {
     }
     return conbi;
 }
-// 数字を2進数に変換して, リストに格納する関数
+// 数字を2進数に変換して, リストに格納する関数.
 function generateBinaryListFromDecimal(num) {
     binary_list = [];
     
+    // どのテキスト要素を選択するかを決める,判定リストを作成.
+    // アイデアの候補を作成するため, リストの要素が1の場合にはその要素に対応する
+    // テキスト要素を選択する.
     for (var i = 0; i < 4; i++) {
         flag = Math.trunc(num % 2);
         binary_list.unshift(flag);
@@ -84,4 +94,18 @@ function generateBinaryListFromDecimal(num) {
         num = Math.trunc(num / 2);
     }
     return binary_list;
+}
+
+function is_two_or_more_elements_of_a_idea(num) {
+    // num が２の冪乗である場合, numを2進数に変換すると, ある一つのビット値のみが1となる.
+    // numの2進数化 → bit値が1の場合には, それに対応するテキスト要素をアイデア候補の作成のために使用.
+    // → 現在, テキスト要素数が2以上となる場合を対象. → numが2の冪乗でない場合 
+    // = numに対して底が2の対数を取ったときの値が整数ではない.
+    flag = Number.isInteger(Math.log2(num));
+    
+    if (flag == 1) {
+        return 0;
+    }else {
+        return 1;
+    }
 }

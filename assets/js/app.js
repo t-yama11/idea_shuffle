@@ -16,7 +16,7 @@ function viewCombinationTable() {
     // 表のヘッダーの作成.
     generateTable(table, thread, tbody);
 
-    // テキスト要素が2つ以上となる組み合わせを求める.
+    // テキスト要素が2つ以上となる組み合わせを求める
     for (var num = 1; num < 16; num++) {
         if (is_two_or_more_elements_of_a_idea(num)) {
             row = generateConbinationRow(text_list, num);
